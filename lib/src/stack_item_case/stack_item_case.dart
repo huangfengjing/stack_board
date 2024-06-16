@@ -421,6 +421,7 @@ class _StackItemCaseState extends State<StackItemCase> {
           // else
             _rotateAndMoveHandle(context, item.status, item),
             _deleteHandle(context),
+            _editHandle(context, item.status),
           Positioned(
               top: style.buttonSize,
               left: 0,
@@ -506,6 +507,25 @@ class _StackItemCaseState extends State<StackItemCase> {
         child: GestureDetector(
           onTap: () => widget.onDel?.call(),
           child: _toolCase(context, style, const Icon(Icons.delete)),
+        ),
+      ),
+    );
+  }
+
+  /// * 编辑手柄
+  /// * Edit handle
+  Widget _editHandle(BuildContext context, StackItemStatus status) {
+    final CaseStyle style = _caseStyle(context);
+
+    return Positioned(
+      left: 0,
+      bottom: 0,
+      // right: 0,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => _onEdit(context, status),
+          child: _toolCase(context, style, const Icon(Icons.edit)),
         ),
       ),
     );
