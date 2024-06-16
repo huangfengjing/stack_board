@@ -7,6 +7,7 @@ import 'package:stack_board/flutter_stack_board.dart';
 import 'package:stack_board/stack_board_item.dart';
 import 'package:stack_board/stack_case.dart';
 import 'package:stack_board/stack_items.dart';
+import 'package:stack_board_example/stack_text_form.dart';
 
 class ColorContent extends StackItemContent {
   ColorContent({required this.color});
@@ -81,7 +82,30 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _boardController = StackBoardController();
+    _boardController = StackBoardController(onStartEdit: (itemId) {
+      final StackItem<StackItemContent>? item = _boardController.getById(itemId);
+      if (null == item) {
+        return;
+      }
+      Widget? formWidget = formBuilder(item);
+      showDialog<void>(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text('编辑'),
+            content: formWidget,
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 
   @override
@@ -269,23 +293,7 @@ class _HomePageState extends State<HomePage> {
 
         /// 背景
         background: ColoredBox(color: Colors.grey[100]!),
-        customBuilder: (StackItem<StackItemContent> item) {
-          if (item is StackTextItem) {
-            return StackTextCase(item: item);
-          } else if (item is StackDrawItem) {
-            return StackDrawCase(item: item);
-          } else if (item is StackImageItem) {
-            return StackImageCase(item: item);
-          } else if (item is ColorStackItem) {
-            return Container(
-              width: item.size.width,
-              height: item.size.height,
-              color: item.content?.color,
-            );
-          }
-
-          return const SizedBox.shrink();
-        },
+        customBuilder: viewBuilder,
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -357,5 +365,41 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  Widget? viewBuilder(StackItem<StackItemContent> item) {
+    if (item is StackTextItem) {
+      return StackTextCase(item: item);
+    } else if (item is StackDrawItem) {
+      return StackDrawCase(item: item);
+    } else if (item is StackImageItem) {
+      return StackImageCase(item: item);
+    } else if (item is ColorStackItem) {
+      return Container(
+        width: item.size.width,
+        height: item.size.height,
+        color: item.content?.color,
+      );
+    }
+
+    return const SizedBox.shrink();
+  }
+
+  Widget? formBuilder(StackItem<StackItemContent> item) {
+    if (item is StackTextItem) {
+      return StackTextForm(item: item);
+    } else if (item is StackDrawItem) {
+      return StackDrawCase(item: item);
+    } else if (item is StackImageItem) {
+      return StackImageCase(item: item);
+    } else if (item is ColorStackItem) {
+      return Container(
+        width: item.size.width,
+        height: item.size.height,
+        color: item.content?.color,
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }

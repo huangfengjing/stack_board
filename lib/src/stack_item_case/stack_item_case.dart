@@ -142,6 +142,7 @@ class _StackItemCaseState extends State<StackItemCase> {
     status = StackItemStatus.editing;
     _stackController.selectOne(itemId);
     _stackController.updateBasic(itemId, status: status);
+    _stackController.onStartEdit?.call(itemId);
     widget.onStatusChanged?.call(status);
   }
 

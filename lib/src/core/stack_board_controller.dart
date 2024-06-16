@@ -38,7 +38,7 @@ class StackConfig {
 @immutable
 // ignore: must_be_immutable
 class StackBoardController extends SafeValueNotifier<StackConfig> {
-  StackBoardController({String? tag})
+  StackBoardController({String? tag, this.onStartEdit})
       : assert(tag != 'def', 'tag can not be "def"'),
         _tag = tag,
         super(StackConfig.init());
@@ -48,6 +48,8 @@ class StackBoardController extends SafeValueNotifier<StackConfig> {
   final String? _tag;
 
   final Map<String, int> _indexMap = <String, int>{};
+
+  void Function(String itemId)? onStartEdit;
 
   static final StackBoardController _defaultController =
       StackBoardController(tag: 'def');
