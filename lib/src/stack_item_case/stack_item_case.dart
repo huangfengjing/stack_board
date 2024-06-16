@@ -416,10 +416,11 @@ class _StackItemCaseState extends State<StackItemCase> {
                   SystemMouseCursors.resizeUpRightDownLeft)));
         }
         widgets.addAll(<Widget>[
-          if (item.status == StackItemStatus.editing)
-            _deleteHandle(context)
-          else
+          // if (item.status == StackItemStatus.editing)
+          //   _deleteHandle(context)
+          // else
             _rotateAndMoveHandle(context, item.status, item),
+            _deleteHandle(context),
           Positioned(
               top: style.buttonSize,
               left: 0,
@@ -497,7 +498,7 @@ class _StackItemCaseState extends State<StackItemCase> {
     final CaseStyle style = _caseStyle(context);
 
     return Positioned(
-      left: 0,
+      // left: 0,
       bottom: 0,
       right: 0,
       child: MouseRegion(
